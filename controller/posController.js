@@ -1,38 +1,58 @@
 const clientes = require('../models/clientes');
+const nodemailer = require('nodemailer');
 
-exports.cliente = async (req, res)=>{
-    let listaClientes = await clientes.find();
-    res.json(listaClientes);
+exports.iniciarSesion = async (req, res)=>{
+    let buscarUser = await clientes.findOne({nombre : req.body.nombre});
+    console.log(buscarUser);
+    if(buscarUser.length === 0) {   
+        console.log("No existe usuario");
+        res.render('index');
+    } else if(buscarUser.contraseña === req.body.contraseña){
+        res.render('landing')
+    } else {
+        console.log('Contraseña incorrecta');
+        res.render('index');
+    }
 };
 
-exports.nuevoCliente = async(req, res) => {
-    const nCliente = new clientes({
-        id : 1,
-        nombre : "PRUEBA 2",
-        telefono : 123456,
-        ubicacion : "ubicacion",
-        historicoDeCompras: 0,
-        totalComprado : 50000
+exports.recPassword = async(req, res) => {
+    let recuperar = await clientes.findOne({nombre : req.body.nombre});
+    console.log(recuperar)
+    if(recuperar === null){
+        console.log("No existe")
+
+        res.end();
+    }else{
+        correoUsuario = recuperar.correo;
+    }  
+    
+    var transporter = nodemailer.createTransport({
+        service: 'Gmail',
+        auth:{
+            user: 'bkvides@misena.edu.co',
+            pass: 'suopznpiybmsrnsx'
+        }
+    });
+    var mailOptions = {
+        from : 'Remitente',
+        to : correoUsuario,
+        subject: 'Recuperacion de contraseña',
+        text: 'Su contraseña es 231546'
+    }
+    
+    transporter.sendMail(mailOptions, function(error, info){
+        if(error){
+            console.log(error);
+            
+        }
+        else {
+            console.log("Email Sent to: "+correoUsuario);
+            res.render('index');
+        }
     })
+}
 
-    await nCliente.save();
-
-    res.redirect('index')
-};
-
-// exports.updatemascota = async(req, res) => {
-
-//     let buscarId = await Mascotas.find({id : req.body.id});
-//     let udpdate = await Mascota.updateOne({
-//         id: req.body.id,
-//         name : req.body.name,
-//         raza : req.body.raza
-//     })
-//     res.redirect('Mascotas')
-   
-// }
-
-// exports.deletemascota = async(req, res) => {
+// exports. = async(req, res) => {
 
 //     let id = req.params.id;
 //     const deleteMasc = await Mascota.findOneAndDelete({"id": id});
@@ -41,26 +61,19 @@ exports.nuevoCliente = async(req, res) => {
 // }
 
 // Controlador para registrar un nuevo usuario
-exports.registerUser = async (req, res) => {
-    console.log("INGRESO REGISTRO USUARIO")
-  const {   nombre,
-            historicoDeCompras,
-            id,
-            telefono,
-            totalComprado,
-            ubicacion } = req.body;
 
+exports.registerUser = async (req, res) => {
     const newUser = new clientes({
-      nombre,
-      historicoDeCompras,
-      id,
-      telefono,
-      totalComprado,
-      ubicacion
+      nombre : req.body.nombre,
+      telefono: req.body.telefono,
+      correo : req.body.correo,
+      ubicacion : {
+        centro : req.body.centro,
+        zoom : req.body.zoom
+      },
+      contraseña: req.body.contraseña
     });
 
     await newUser.save();
-
-    res.status(201).json({ message: 'Usuario registrado exitosamente' });
-
+    res.redirect('login');
 };

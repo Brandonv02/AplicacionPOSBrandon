@@ -6,6 +6,10 @@ const clientes = new conexionBD.Schema({
         require: true,
         default:"Sin nombre"
     },
+    correo:{
+        type: String,
+        require: true,
+    },
     telefono: {
         type: String,
         require: true
@@ -13,16 +17,24 @@ const clientes = new conexionBD.Schema({
     ubicacion : {
         centro : {
             type: Number,
+            default:0
         },
         zoom : {
-            type: Number
+            type: Number,
+            default:0
         }
     },
     totalComprado : {
-        type : Number
+        type : Number,
+        default:0
     },
     historicoDeCompras : {
-        type : Number
+        type : Number,
+        default:0
+    },
+    contraseña : { 
+        type : String,
+        require: true
     }
 });
 
