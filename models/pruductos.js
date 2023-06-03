@@ -23,10 +23,12 @@ const productos = new conexionBD.Schema({
         type : Number
     },
     imagen : {
-
+        type : String,
+        default: "https://source.unsplash.com/featured/300x201"
     },
     habilitado: { 
-        type: Boolean
+        type: Boolean,
+        default: true
     }
 });
 
