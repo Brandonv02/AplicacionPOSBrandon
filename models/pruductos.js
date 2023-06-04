@@ -2,7 +2,7 @@ const conexionBD = require('../config/ConexionBd')
 
 const productos = new conexionBD.Schema({
     referencia:{
-        type : Number,
+        type : String,
         min:0,
         max:1000
     },

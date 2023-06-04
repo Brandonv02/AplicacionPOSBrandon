@@ -4,12 +4,14 @@ const producto = require('../models/pruductos');
 
 exports.iniciarSesion = async (req, res)=>{
     let buscarUser = await clientes.findOne({nombre : req.body.nombre});
-    console.log(buscarUser);
     if(buscarUser.length === 0) {   
         console.log("No existe usuario");
         res.render('index');
-    } else if(buscarUser.contraseña === req.body.contraseña){
-        res.render('landing')
+    } else if(buscarUser.contrasena === req.body.contrasena){
+        let listaProducto = await producto.find();
+        res.render('landing', {
+            "listProd" : listaProducto
+        })
     } else {
         console.log('Contraseña incorrecta');
         res.render('index');
@@ -63,32 +65,39 @@ exports.registerUser = async (req, res) => {
         centro : req.body.centro,
         zoom : req.body.zoom
       },
-      contraseña: req.body.contraseña
+      contrasena: req.body.contrasena
     });
 
     await newUser.save();
     res.redirect('login');
 };
 
+exports.homepage = async (req, res) => {
+
+}
+
+
+
 exports.productos = async (req,res)=>{
     let listaProducto = await producto.find();
-    res.render('../views/productos',{
-        "listado" : listaProducto
+    console.log(listaProducto, "lista producto")
+    res.render('../views/landing',{
+        "listProd" : listaProducto
     })
 };
 
 exports.newproduct = async(req, res) => {
-    console.log(req);
+    console.log(req.body);
     const nuevoproducto = new producto({
         nombre : req.body.nombre,
-        referencia : req.body.referencia,
-        descripcion : req.body.descripcion,
+        referencia : req.body.Referencia,
+        descripcion : req.body.Descripción,
         precio : req.body.precio,
-        stock : req.body.stock,
+        stock : req.body.Stock,
         imagen : req.body.imagen,
-        habilitado : req.body.habilitado
+        habilitado : true
     })
-    await producto.save();
+    await nuevoproducto.save();
 
-    res.redirect('prodcutos')
+    res.redirect('productosvista')
 }

@@ -2,6 +2,9 @@
 <html>
 <head>
   <title>Tienda de Productos</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -15,10 +18,13 @@
       padding: 20px;
       color: #fff;
       text-align: center;
+      display: flex;
+      justify-content: space-between;
     }
 
     .container {
-      max-width: 800px;
+      display: flex;
+      max-width: 100%;
       margin: 0 auto;
       padding: 20px;
       background-color: #fff;
@@ -33,75 +39,84 @@
       letter-spacing: 2px;
     }
 
-    .product {
+    .card {
+      justify-content: space-between;
       display: flex;
-      margin-bottom: 40px;
+      height: 340px;
+      margin: auto;
+      width: 300px;
+      background-color: #f2f2f2;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
-
-    .product img {
-      max-width: 300px;
-      margin-right: 20px;
+    
+    .card img {
+      width: 100%;
       border-radius: 5px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      margin-bottom: 10px;
     }
-
-    .product-info {
-      flex: 1;
-    }
-
-    .product-info h3 {
+    
+    .card h3 {
       margin-top: 0;
-      font-size: 24px;
+      font-size: 20px;
       color: #333;
     }
-
-    .product-info p {
-      margin-bottom: 10px;
+    
+    .card p {
       color: #666;
+      line-height: 1.4;
     }
-
-    .cta-button {
-      display: inline-block;
-      padding: 10px 20px;
-      background-color: #ff5252;
-      border: none;
+    
+    .card button {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      background-color: #4CAF50;
       color: #fff;
-      text-align: center;
-      font-size: 16px;
-      border-radius: 3px;
-      text-decoration: none;
-      transition: background-color 0.3s;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
     }
-
-    .cta-button:hover {
-      background-color: #e60000;
+    
+    .card button:hover {
+      background-color: #45a049;
     }
   </style>
 </head>
 <body>
   <div class="header">
-    <h1>¡Descubre nuestra increíble colección de productos!</h1>
-    <a type="button" class="botonR" href="/productosvista">Productos</a>
+    <a type="button" class="botonR" href="/productosvista">Agregar productos</a>
+    <h1>Tienda de ropa</h1>
+    <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+      Carrito<i class="bi bi-cart4"></i>
+    </button>
   </div>
+
   <div class="container">
-    <div class="product">
-      <img src="https://source.unsplash.com/featured/300x201" alt="Producto 1">
-      <div class="product-info">
-        <h3>Producto 1</h3>
-        <p>Descripción del producto 1. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-        <p>Precio: $99.99</p>
-        <a href="#" class="cta-button">Comprar ahora</a>
-      </div>
-    </div>
-    <div class="product">
-      <img src="https://source.unsplash.com/featured/300x201" alt="Producto 2">
-      <div class="product-info">
-        <h3>Producto 2</h3>
-        <p>Descripción del producto 2. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-        <p>Precio: $49.99</p>
-        <a href="#" class="cta-button">Comprar ahora</a>
-      </div>
-    </div>
+
+      <% listProd.forEach(function(prod) { %>
+        <div class="card">
+          <img src="<%=prod.imagen%>" alt="Imagen del Producto">
+          <h3><%=prod.nombre%></h3>
+          <p>Precio: <%=prod.precio%></p>
+          <button>Agregar al carrito</button>
+        </div>
+      <% }); %>
+
   </div>
+
+  
+
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+    <div class="offcanvas-header">
+      <h5 id="offcanvasRightLabel">Offcanvas right</h5>
+      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+  <div class="offcanvas-body">
+    ...
+  </div>
+</div>
 </body>
 </html>

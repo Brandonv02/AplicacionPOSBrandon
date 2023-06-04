@@ -32,7 +32,7 @@ const clientes = new conexionBD.Schema({
         type : Number,
         default:0
     },
-    contraseña : { 
+    contrasena : { 
         type : String,
         require: true
     }

@@ -17,7 +17,7 @@ app.get('/', (req,res)=>{
     res.render('../views/index')
 })
 
-app.post('/iniciarSesion', ruta.iniciarSesion);
+app.post('/home', ruta.iniciarSesion);
 app.post('/nuevoUsuario', ruta.registerUser);
 app.post('/recuperarUsuario', ruta.recPassword);
 app.get('/registro', (req, res) => {res.render('register')})
