@@ -8,6 +8,7 @@ app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname,'views'));
 app.use(morgan("dev"));
 app.use(express.urlencoded({extended:true}));
+app.use(express.static("static"));
 
 app.use(express.json());
 
@@ -24,6 +25,7 @@ app.get('/registro', (req, res) => {res.render('register')})
 app.get('/login', (req, res) => {res.render('index')})
 app.get('/productosvista', (req, res) => {res.render('productos')})
 app.post('/agregarproducto', ruta.newproduct);
+app.get('/excel', ruta.descargarExcel);
 
 app.listen(PORT, ()=>{
     console.log('estoy en el puerto: ' + PORT);

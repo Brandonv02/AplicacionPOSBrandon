@@ -4,7 +4,12 @@
   <title>Tienda de Productos</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+  crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+  crossorigin=""></script>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -24,12 +29,14 @@
 
     .container {
       display: flex;
+      justify-content: space-between;
       max-width: 100%;
       margin: 0 auto;
       padding: 20px;
       background-color: #fff;
       border-radius: 5px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
     }
 
     h1 {
@@ -39,38 +46,9 @@
       letter-spacing: 2px;
     }
 
-    .card {
-      justify-content: space-between;
-      display: flex;
-      height: 340px;
-      margin: auto;
-      width: 300px;
-      background-color: #f2f2f2;
-      border-radius: 10px;
-      padding: 20px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-    
-    .card img {
-      width: 100%;
-      border-radius: 5px;
-      margin-bottom: 10px;
-    }
-    
-    .card h3 {
-      margin-top: 0;
-      font-size: 20px;
-      color: #333;
-    }
-    
-    .card p {
-      color: #666;
-      line-height: 1.4;
-    }
-    
     .card button {
       display: block;
-      width: 100%;
+      width: 60px;
       padding: 10px;
       background-color: #4CAF50;
       color: #fff;
@@ -82,15 +60,90 @@
     
     .card button:hover {
       background-color: #45a049;
+    } 
+    .card {
+      position: relative;
+      width: 300px;
+      height: 400px;
+      background-color: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-content {
+      padding: 20px;
+      text-align: center;
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .card:hover .card-content {
+      transform: translateY(-100%);
+    }
+
+    .card-details {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      text-align: center;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: #ffffffd8;
+      transition: transform 0.3s ease-in-out;
+      transform: translateY(100%);
+    }
+
+    .card:hover .card-details {
+      transform: translateY(0);
+    }
+
+    .btn-details {
+      background-color: #555;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    #map { 
+      height: 450px; 
+      width: 450px; 
+    }
+
+    .containerMap{
+      display: flex;
+      justify-content: center;
+    }
+
+    .listaCarrito{
+      display: flex;
+      justify-content: space-between;
+      border: 1px solid #00000038;
+      height: 80px;
+      border-radius: 17px;
+      align-items: center;
+      padding: 10px;
+      margin-bottom: 10px;
+      box-shadow: 6px 4px 13px 0px gray;
+    }
+
+    .listaCarrito img {
+      width: 90px;
+      border-radius: 10px;
     }
   </style>
+
 </head>
 <body>
   <div class="header">
     <a type="button" class="botonR" href="/productosvista">Agregar productos</a>
-    <h1>Tienda de ropa</h1>
+    <h1>Tienda de ropa</h1> 
     <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
-      Carrito<i class="bi bi-cart4"></i>
+      Carrito<i class="bi bi-cart-plus-fill"></i>
     </button>
   </div>
 
@@ -98,25 +151,86 @@
 
       <% listProd.forEach(function(prod) { %>
         <div class="card">
-          <img src="<%=prod.imagen%>" alt="Imagen del Producto">
-          <h3><%=prod.nombre%></h3>
-          <p>Precio: <%=prod.precio%></p>
-          <button>Agregar al carrito</button>
+          <img src="https://source.unsplash.com/featured/300x400" alt="Imagen del Producto">
+          <div class="card-details">
+            <h2><%=prod.nombre%></h2>
+            <p><%=prod.descripcion%></p>
+            <p>Precio: <%=prod.precio%></p>
+            <p>Disponibilidad: <%=prod.stock%></p>
+              <input type="text" style="display: none;" id="idProdu" value="<%=prod._id%>">
+              <button onclick="agregarCarrito('<%=prod._id%>','<%=prod.nombre%>','<%=prod.precio%>','<%=prod.imagen%>')">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-cart-plus-fill" viewBox="0 0 16 16">
+                <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM9 5.5V7h1.5a.5.5 0 0 1 0 1H9v1.5a.5.5 0 0 1-1 0V8H6.5a.5.5 0 0 1 0-1H8V5.5a.5.5 0 0 1 1 0z"/>
+                </svg>
+              </button>
+          </div>
         </div>
       <% }); %>
 
   </div>
-
-  
+  <a href="/excel">Descargar</a>
+  <div class="containerMap">
+    <div id="map"></div>
+  </div>
 
   <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
     <div class="offcanvas-header">
-      <h5 id="offcanvasRightLabel">Offcanvas right</h5>
+      <h5 id="offcanvasRightLabel">Carrito de compras</h5>
       <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
   <div class="offcanvas-body">
-    ...
+    <div id="container-carrito">
+      <div class="listaCarrito">
+        <img src="https://source.unsplash.com/featured/300x201" style="width: 90px;border-radius: 10px;">
+        <p>Jeans</p>
+        <p>50000</p>
+      </div>
+    </div>
   </div>
 </div>
+
+<script>
+  var map = L.map('map').setView([6.18, -75.60], 12);
+  var marker = L.marker([6.18, -75.60]).addTo(map);
+
+  var circle = L.circle([6.18, -75.55], {
+    color: 'red',
+    fillColor: '#f03',
+    fillOpacity: 0.5,
+    radius: 500
+  }).addTo(map);
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+  }).addTo(map);  
+
+
+  function agregarCarrito(id,name,pricePro,image) {
+
+    const container = document.getElementById('container-carrito');
+    const idPro = document.getElementById('idProdu')
+
+    const cardlist = document.createElement('div')
+    cardlist.setAttribute('class','listaCarrito')
+
+    const imagen = document.createElement('img')
+    const nombrePro = document.createElement('p')
+    const price = document.createElement('p')
+    const doc = document.createElement('p')
+
+    // cardlist.appendChild(doc)
+    cardlist.appendChild(imagen)
+    cardlist.appendChild(nombrePro)
+    cardlist.appendChild(price)
+
+    // doc.textContent = id;
+    imagen.src = image;
+    nombrePro.textContent = name;
+    price.textContent = pricePro;
+
+    container.appendChild(cardlist)
+
+  }
+</script>
 </body>
 </html>
