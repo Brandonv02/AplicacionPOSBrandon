@@ -11,7 +11,7 @@ exports.iniciarSesion = async (req, res)=>{
         console.log("No existe usuario");
         res.render('index');
     } else if(buscarUser.contrasena === req.body.contrasena){
-        let listaProducto = await producto.find();
+        let listaProducto = await producto.find().limit(10);
         console.log(listaProducto);
         res.render('landing', {
             "listProd" : listaProducto
@@ -83,6 +83,28 @@ exports.productos = async (req,res)=>{
     let listaProducto = await producto.find();
     res.render('../views/landing',{
         "listProd" : listaProducto
+    })
+};
+
+exports.grafica = async (req,res)=>{
+    let nombreProducto = await producto.find({},{nombre:1,_id:0});
+    let stockProducto = await producto.find({},{stock:1,_id:0});
+    let arrayNombre=[1,2,3,4]; 
+    let arrayStock=[100,11,50,155];
+    let arr = Array.from(arrayNombre);
+    let arr2 = Array.from(arrayStock);
+    // const valorProd = nombreProducto.map(element => {
+    //     // console.log(element.nombre)
+    //     arrayNombre.push(element.nombre)
+    // })
+    // const valorStock = stockProducto.map(element => {
+    //     // console.log(element.stock)
+    //     arrayStock.push(element.stock)
+    // })
+    console.log(arr2);
+    res.render('../views/grafica',{
+        "stock" : arr,
+        "nombre" : arr2
     })
 };
 

@@ -26,6 +26,7 @@ app.get('/login', (req, res) => {res.render('index')})
 app.get('/productosvista', (req, res) => {res.render('productos')})
 app.post('/agregarproducto', ruta.newproduct);
 app.get('/excel', ruta.descargarExcel);
+app.get('/grafica', ruta.grafica);
 
 app.listen(PORT, ()=>{
     console.log('estoy en el puerto: ' + PORT);
