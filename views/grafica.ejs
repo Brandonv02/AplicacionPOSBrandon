@@ -8,42 +8,36 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 </head>
 
-<body onload="graficar('<%=stock%>','<%=nombre%>')">
-    <header>
-    </header>
+<body onload="grafica()">
 
-    <canvas id="myChart" style="width:100%;max-width:700px"></canvas>
+    <canvas id="myChart" ></canvas>
 
-    <footer>
-    </footer>
     <script>
-        // const xValues = [50,60,70,80,90,100,110,120,130,140,150];
-        // const yValues = [7,8,8,9,9,9,10,11,14,14,15];
-        function graficar(stock,nombres){
-            Array.from(stock)
-            Array.from(nombres)
-            console.log(typeof(stock),typeof(nombres))
-            console.log(stock)
-            new Chart("myChart", {
-        type: "bar",
+    const ctx = document.getElementById('myChart');
+
+    const grafica =  () => {
+        console.log('<%=productosGrafica%>');
+        new Chart(ctx, {
+        type: 'bar',
         data: {
-            labels:nombres,
+            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
             datasets: [{
-            fill: false,
-            lineTension: 0,
-            backgroundColor: "rgba(0,0,255,1.0)",
-            borderColor: "rgba(0,0,255,0.1)",
-            data:  stock
+                label: '# of Votes',
+                data: [12, 19, 3, 5, 2, 3],
+                borderWidth: 1,
+                backgroundColor: '#9BD0F5'
             }]
         },
         options: {
-            legend: {display: false},
             scales: {
-            yAxes: [{ticks: {min: 0, max:160}}],
+            y: {
+                beginAtZero: true
+            }
             }
         }
         });
     }
+
     </script>
 </body>
 

@@ -64,12 +64,13 @@
     } 
     .card {
       position: relative;
-      width: 300px;
+      width: 315px;
       height: 400px;
       background-color: #fff;
       border-radius: 10px;
       overflow: hidden;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      margin-bottom: inherit;
     }
 
     .card-content {
@@ -206,10 +207,19 @@
     maxZoom: 19,
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
   }).addTo(map);  
-
-
+  
+  
   function agregarCarrito(id,name,pricePro,image) {
+    // proCook = {};
+    var myAry =['sdfsdf','sdfsd', 'sdfdsf'];
+    if (localStorage.producto[4] != id) {
+      console.log(localStorage.producto[4])
+      myAry.push(id)
+      localStorage.setItem('producto', JSON.stringify(myAry))
 
+    } else {
+      alert('YA SE AGREGO');
+    }
     const container = document.getElementById('container-carrito');
     const idPro = document.getElementById('idProdu')
 
