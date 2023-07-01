@@ -137,6 +137,10 @@
       width: 90px;
       border-radius: 10px;
     }
+
+    .eliminar-producto{
+      cursor: pointer;
+    }
   </style>
 
 </head>
@@ -153,7 +157,7 @@
 
       <% listProd.forEach(function(prod) { %>
         <div class="card">
-          <img src="https://source.unsplash.com/featured/300x400" alt="Imagen del Producto">
+          <img src="https://source.unsplash.com/300x400/?<%=prod.nombre%>" alt="Imagen del Producto">
           <div class="card-details">
             <h2><%=prod.nombre%></h2>
             <p><%=prod.descripcion%></p>
@@ -179,16 +183,11 @@
 
   <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
     <div class="offcanvas-header">
-      <h5 id="offcanvasRightLabel">Carrito de compras</h5>
+      <h5 id="offcanvasRightLabel">Carrito de compraprecios</h5>
       <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
   <div class="offcanvas-body">
     <div id="container-carrito">
-      <div class="listaCarrito">
-        <img src="https://source.unsplash.com/featured/300x201" style="width: 90px;border-radius: 10px;">
-        <p>Jeans</p>
-        <p>50000</p>
-      </div>
     </div>
   </div>
 </div>
@@ -208,18 +207,32 @@
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
   }).addTo(map);  
   
-  
-  function agregarCarrito(id,name,pricePro,image) {
-    // proCook = {};
-    var myAry =['sdfsdf','sdfsd', 'sdfdsf'];
-    if (localStorage.producto[4] != id) {
-      console.log(localStorage.producto[4])
-      myAry.push(id)
-      localStorage.setItem('producto', JSON.stringify(myAry))
+  var carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
-    } else {
-      alert('YA SE AGREGO');
+  function agregarCarrito(id,name,pricePro,image) {
+    let productoagregado ={
+      "id":id,
+      "nombre":name,
+      "precio":pricePro,
+      
     }
+    //function logica que guarde los objetos
+
+    //El boton  Carrito debe llamar una funcion que:
+    //1. leer si hay una cookie..analizar si hay objetos repetidos entre la coockie y el array.
+    //2. pintar el offcanvas con los objetos encontrados en el carrito
+    
+    carrito.push(productoagregado);
+    // proCook = {};
+    // var myAry =['sdfsdf','sdfsd', 'sdfdsf'];
+    // if (localStorage.producto[4] != id) {
+    //   console.log(localStorage.producto[4])
+    //   myAry.push(id)
+    //   localStorage.setItem('producto', JSON.stringify(myAry))
+
+    // } else {
+    //   alert('YA SE AGREGO');
+    // }
     const container = document.getElementById('container-carrito');
     const idPro = document.getElementById('idProdu')
 
@@ -230,20 +243,41 @@
     const nombrePro = document.createElement('p')
     const price = document.createElement('p')
     const doc = document.createElement('p')
+    const eliminar = document.createElement('span');
 
     // cardlist.appendChild(doc)
     cardlist.appendChild(imagen)
     cardlist.appendChild(nombrePro)
     cardlist.appendChild(price)
+    cardlist.appendChild(eliminar)  
 
+    eliminar.innerText = 'x'
+    eliminar.className = 'eliminar-producto'
     // doc.textContent = id;
     imagen.src = image;
     nombrePro.textContent = name;
     price.textContent = pricePro;
+    eliminar.addEventListener("click" , eliminarPro)
+
 
     container.appendChild(cardlist)
-
+    saveLocal()
   }
+
+  const eliminarPro = () => {
+    console.log('ingresa')
+    const product = carrito.find((element) => element.id)
+
+    console.log(product)
+
+    carrito = carrito.filter((element) => {
+      return element !== product
+    })
+  }
+
+  const saveLocal = () => {
+    localStorage.setItem("carrito", JSON.stringify(carrito));
+  };
 </script>
 </body>
 </html>
