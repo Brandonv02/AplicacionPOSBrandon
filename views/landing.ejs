@@ -125,7 +125,7 @@
       display: flex;
       justify-content: space-between;
       border: 1px solid #00000038;
-      height: 80px;
+      height: 135px;
       border-radius: 17px;
       align-items: center;
       padding: 10px;
@@ -138,8 +138,39 @@
       border-radius: 10px;
     }
 
+    .listaCarrito p {
+      margin-top: 18px;
+    }
+
     .eliminar-producto{
       cursor: pointer;
+    }
+
+    .offcanvas-body {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 0 !important;
+    }
+
+    .offcanvas-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: black;
+      height: 70px;
+      padding: 20px;
+      color: #f4f4f4;
+    }
+
+    .cantidad-carrito {
+      background-color: red;
+      color: white;
+      border-radius: 30%;
+      font-size: 12px;
+      padding: 4px;
+      right: 30px;
+      position: absolute;
     }
   </style>
 
@@ -148,7 +179,7 @@
   <div class="header">
     <a type="button" class="botonR" href="/productosvista">Agregar productos</a>
     <h1>Tienda de ropa</h1> 
-    <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+    <button class="btn btn-primary" type="button" onclick="mostrarCarrito()" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
       Carrito<i class="bi bi-cart-plus-fill"></i>
     </button>
   </div>
@@ -183,16 +214,21 @@
 
   <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
     <div class="offcanvas-header">
-      <h5 id="offcanvasRightLabel">Carrito de compraprecios</h5>
+      <h5 id="offcanvasRightLabel">Carrito de compra</h5>
       <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
   <div class="offcanvas-body">
     <div id="container-carrito">
     </div>
+    <div class="offcanvas-footer">
+      <button type="button" class="btn btn-success">Comprar</button>
+      <span class="total">Total: 50000</span>
+    </div>
   </div>
 </div>
 
 <script>
+
   var map = L.map('map').setView([6.18, -75.60], 12);
   var marker = L.marker([6.18, -75.60]).addTo(map);
 
@@ -208,75 +244,93 @@
   }).addTo(map);  
   
   var carrito = JSON.parse(localStorage.getItem("carrito")) || [];
-
+  
   function agregarCarrito(id,name,pricePro,image) {
     let productoagregado ={
       "id":id,
       "nombre":name,
       "precio":pricePro,
-      
+      "Image":image,
+      "cantidad": 0
     }
     //function logica que guarde los objetos
-
     //El boton  Carrito debe llamar una funcion que:
     //1. leer si hay una cookie..analizar si hay objetos repetidos entre la coockie y el array.
     //2. pintar el offcanvas con los objetos encontrados en el carrito
-    
-    carrito.push(productoagregado);
-    // proCook = {};
-    // var myAry =['sdfsdf','sdfsd', 'sdfdsf'];
-    // if (localStorage.producto[4] != id) {
-    //   console.log(localStorage.producto[4])
-    //   myAry.push(id)
-    //   localStorage.setItem('producto', JSON.stringify(myAry))
+    let counter = 0;
+    let carritoF = carrito.filter(element => element.id === id)
+    if (carritoF.length > 0) {
+      console.log(carritoF)
+      carritoF[0].cantidad = carritoF[0].cantidad + 1;
+      mostrarCarrito();
+    } else {
+      carrito.push(productoagregado);
+    }
 
-    // } else {
-    //   alert('YA SE AGREGO');
-    // }
-    const container = document.getElementById('container-carrito');
-    const idPro = document.getElementById('idProdu')
-
-    const cardlist = document.createElement('div')
-    cardlist.setAttribute('class','listaCarrito')
-
-    const imagen = document.createElement('img')
-    const nombrePro = document.createElement('p')
-    const price = document.createElement('p')
-    const doc = document.createElement('p')
-    const eliminar = document.createElement('span');
-
-    // cardlist.appendChild(doc)
-    cardlist.appendChild(imagen)
-    cardlist.appendChild(nombrePro)
-    cardlist.appendChild(price)
-    cardlist.appendChild(eliminar)  
-
-    eliminar.innerText = 'x'
-    eliminar.className = 'eliminar-producto'
-    // doc.textContent = id;
-    imagen.src = image;
-    nombrePro.textContent = name;
-    price.textContent = pricePro;
-    eliminar.addEventListener("click" , eliminarPro)
-
-
-    container.appendChild(cardlist)
     saveLocal()
+    mostrarCarrito();
+  }
+  
+  const mostrarCarrito = () => {
+    const container = document.getElementById('container-carrito');
+
+    container.innerHTML ="";
+    //cardlist.innerHTML= "";console
+    carrito.forEach(element => {
+      const idPro = document.getElementById('idProdu')
+
+      const cardlist = document.createElement('div');
+      cardlist.setAttribute('class','listaCarrito')
+
+      const imagen = document.createElement('img')
+      const nombrePro = document.createElement('p')
+      const price = document.createElement('p')
+      const doc = document.createElement('p')
+      const eliminar = document.createElement('span');
+      const cantidad = document.createElement('span');
+      cantidad.setAttribute('class','cantidad-carrito');
+
+      // cardlist.appendChild(doc)
+      cardlist.appendChild(imagen)
+      cardlist.appendChild(nombrePro)
+      cardlist.appendChild(price)
+      cardlist.appendChild(eliminar)  
+      cardlist.appendChild(cantidad)  
+
+      eliminar.innerText = 'x'
+      eliminar.className = 'eliminar-producto'
+      // doc.textContent = id;
+      imagen.src = 'https://source.unsplash.com/300x400/?nombre';
+      nombrePro.textContent = element.nombre;
+      price.textContent = element.precio;
+      cantidad.textContent = element.cantidad
+      eliminar.addEventListener("click" , () => {
+        eliminarPro(element.id);
+      })
+
+
+      container.appendChild(cardlist)
+    });
   }
 
-  const eliminarPro = () => {
-    console.log('ingresa')
-    const product = carrito.find((element) => element.id)
-
-    console.log(product)
-
-    carrito = carrito.filter((element) => {
-      return element !== product
-    })
+  const eliminarPro = (id) => {
+    carrito = carrito.filter((element) => element.id !== id)
+    saveLocal();
+    mostrarCarrito();
   }
 
   const saveLocal = () => {
     localStorage.setItem("carrito", JSON.stringify(carrito));
+  };
+
+  const carritoCounter = () => {
+    cantidadCarrito.style.display = "block";
+
+    const carritoLength = carrito.length;
+
+    localStorage.setItem("carritoLength", JSON.stringify(carritoLength));
+
+    cantidadCarrito.innerText = JSON.parse(localStorage.getItem("carritoLength"));
   };
 </script>
 </body>
