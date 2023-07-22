@@ -21,6 +21,11 @@ exports.iniciarSesion = async (req, res)=>{
     }
 };
 
+exports.borrarUser = async (req, res)=>{
+    let buscarUser = await clientes.findByIdAndDelete({_id : req.params.id});
+    res.redirect('/listUser')
+};
+
 exports.recPassword = async(req, res) => {
     let recuperar = await clientes.findOne({nombre : req.body.nombre});
     if(recuperar === null){
@@ -63,6 +68,7 @@ exports.registerUser = async (req, res) => {
       nombre : req.body.nombre,
       telefono: req.body.telefono,
       correo : req.body.correo,
+      rol : req.body.rol,
       ubicacion : {
         centro : req.body.centro,
         zoom : req.body.zoom
@@ -107,7 +113,6 @@ exports.grafica = async (req,res)=>{
 };
 
 exports.newproduct = async(req, res) => {
-    console.log(req.body);
     const nuevoproducto = new producto({
         nombre : req.body.nombre,
         referencia : req.body.Referencia,

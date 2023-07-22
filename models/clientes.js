@@ -14,6 +14,10 @@ const clientes = new conexionBD.Schema({
         type: String,
         require: true
     },
+    rol: {
+        type: String,
+        require: true
+    },
     ubicacion : {
         centro : {
             type: Number,

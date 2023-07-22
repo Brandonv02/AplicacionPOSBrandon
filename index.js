@@ -3,6 +3,7 @@ const morgan = require('morgan')
 const app = express();
 const path = require('path');
 const ruta = require('./controller/posController');
+const clientes = require('./models/clientes');
 
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname,'views'));
@@ -27,6 +28,13 @@ app.get('/productosvista', (req, res) => {res.render('productos')})
 app.post('/agregarproducto', ruta.newproduct);
 app.get('/excel', ruta.descargarExcel);
 app.get('/grafica', ruta.grafica);
+app.get('/listUser',async (req, res) => {
+    let listaUsuarios = await clientes.find();
+        res.render('listausuarios',{
+            "userList" : listaUsuarios
+        })
+    });
+app.get('/borrarUser/:id', ruta.borrarUser);
 
 app.listen(PORT, ()=>{
     console.log('estoy en el puerto: ' + PORT);

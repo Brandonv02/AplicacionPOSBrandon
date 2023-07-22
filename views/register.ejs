@@ -39,7 +39,8 @@
 
     input[type="text"],
     input[type="email"],
-    input[type="password"] {
+    input[type="password"],
+    select {
       width: 100%;
       padding: 10px;
       border: 1px solid #ccc;
@@ -99,13 +100,19 @@
         <label for="username">Telefono:</label>
         <input type="text" name="telefono" placeholder="Ingrese su Telefono">
       </div>
+      <div class="form-group">
+        <label for="rol">Rol:</label>
+        <select name="rol" id="rol">
+          <option>Vendedor</option>
+          <option>Administrador</option>
+          <option>Comprador</option>
+        </select>
+      </div>
       <span>Ubicacion</span>
       <div class="form-group">
-        <!-- <label for="username">Centro</label> -->
         <input type="text" name="centro" placeholder="Ingrese el centro" required>
       </div>
       <div class="form-group">
-        <!-- <label for="email">Zoom</label> -->
         <input type="text" name="zoom" placeholder="Ingrese el zoom" required>
       </div>
       <div class="form-group">
