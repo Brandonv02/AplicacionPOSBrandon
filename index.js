@@ -30,6 +30,7 @@ app.get('/excel', ruta.descargarExcel);
 app.get('/grafica', ruta.grafica);
 app.get('/listUser',async (req, res) => {
     let listaUsuarios = await clientes.find();
+    console.log(listaUsuarios);
         res.render('listausuarios',{
             "userList" : listaUsuarios
         })

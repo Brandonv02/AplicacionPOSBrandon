@@ -110,6 +110,49 @@
       right: 30px;
       position: absolute;
     }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      font-size: 16px;
+    }
+
+    .botonR {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      background-color: #4caf50;
+      border: none;
+      color: #fff;
+      text-align: center;
+      font-size: 16px;
+      border-radius: 3px;
+      cursor: pointer;
+      margin-bottom: 5px;
+      text-decoration: none;
+    }
+
+    button,.boton:hover {
+      background-color: #45a049;
+    }
+
+    .botonR:hover{
+      color: #fff;
+    }
   </style>
 
 </head>
@@ -153,6 +196,7 @@
             <td><%=usr.rol%></td>
             <td>
               <a class="btn btn-outline-danger" role="button" href="/borrarUser/<%=usr._id%>">Eliminar</a>
+              <a class="btn btn-outline-info" role="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="rellenar(userList)">Editar</a>
             </td>
           </tr>
         <% }); %>
@@ -178,10 +222,62 @@
   </div>
 </div>
 
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Editar informacion</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="recuperarUsuario" method="post">
+          <div class="form-group">  
+            <label for="username">Nombre de usuario: <%= userList %> </label>
+            <input type="text" name="nombre" value="<%= userList.nombre%>" required>
+          </div>
+          <div class="form-group">
+            <label for="username">Correo: </label>
+            <input type="email" name="correo" required>
+          </div>
+          <div class="form-group">
+            <label for="username">Telefono:</label>
+            <input type="text" name="telefono">
+          </div>
+          <div class="form-group">
+            <label for="rol">Rol:</label>
+            <select name="rol" id="rol">
+              <option>Vendedor</option>
+              <option>Administrador</option>
+              <option>Comprador</option>
+            </select>
+          </div>
+          <span>Ubicacion</span>
+          <div class="form-group">
+            <input type="text" name="centro" required>
+          </div>
+          <div class="form-group">
+            <input type="text" name="zoom" required>
+          </div>
+          <div class="form-group">
+            <label for="password">Contraseña:</label>
+            <input type="password" name="contrasena" required>
+          </div>
+          <button class="botonR" type="submit">Recuperar</button>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 <script>
 
   var carrito = JSON.parse(localStorage.getItem("carrito")) || [];
-  
+
+  const rellenar = (objeto) => {
+    console.log(objeto, 'olqeirabhguidbguidwbbjjndfjkkdfffdfj')
+    const userEdit = objeto
+  }
+
   function agregarCarrito(id,name,pricePro,image) {
     let productoagregado ={
       "id":id,

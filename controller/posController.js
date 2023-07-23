@@ -47,7 +47,7 @@ exports.recPassword = async(req, res) => {
         from : 'Remitente',
         to : correoUsuario,
         subject: 'Recuperacion de contraseña',
-        text: 'Su contraseña es 231546'
+        text: 'Su contraseña es ${recuperar.contrasena}'
     }
     
     transporter.sendMail(mailOptions, function(error, info){
