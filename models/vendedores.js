@@ -1,7 +1,7 @@
 const conexionBD = require('../config/ConexionBd')
 
 const vendedores = new conexionBD.Schema({
-    id:{
+    documento:{
         type : Number,
         min:0,
         max:1000
@@ -11,9 +11,12 @@ const vendedores = new conexionBD.Schema({
         require: true,
         default:"Sin nombre"
     },
-    telefono: {
+    correo: {
         type: String,
         require: true
+    },
+    ventas: { 
+        type: String
     }
 });
 

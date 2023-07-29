@@ -159,6 +159,7 @@
 <body>
   <div>
     <%- include('../views/header'); %>
+
   </div>
 
   <div class="container" style="border: 2px solid black;">
@@ -166,23 +167,22 @@
     <table class="table table-hover">
       <thead class="table-dark">
         <tr>
+          <th scope="col">Referencia</th>
           <th scope="col">Nombre</th>
-          <th scope="col">Correo</th>
-          <th scope="col">Rol</th>
+          <th scope="col">Precio</th>
           <th scope="col">Acciones</th>
         </tr>
       </thead>
       <tbody>
 
-        <% userList.forEach(function(usr) { %>
+        <% productsList.forEach(function(pro) { %>
           <tr>
-            <td><%=usr.nombre%></td>
-            <td><%=usr.correo%></td>
-            <td><%=usr.rol%></td>
+            <td><%=pro.referencia%></td>
+            <td><%=pro.nombre%></td>
+            <td><%=pro.precio%></td>
             <td>
-              <a class="btn btn-outline-danger" role="button" href="/borrarUser/<%=usr._id%>">Eliminar</a>
-              <a class="btn btn-outline-info" role="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"
-               onclick="rellenar('<%=usr._id%>','<%= usr.nombre%>','<%= usr.correo%>','<%= usr.telefono%>','<%= usr.rol%>','<%= usr.contrasena%>')">Editar</a>
+              <a class="btn btn-outline-danger" role="button" href="/borrarUser/<%=pro._id%>">Eliminar</a>
+              <a class="btn btn-outline-info" role="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Editar</a>
             </td>
           </tr>
         <% }); %>
@@ -216,7 +216,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form action="actualizarUser:id" method="post">
+        <form action="recuperarUsuario" method="post">
           <div class="form-group">  
             <label for="username">Nombre de usuario:</label>
             <input type="text" name="nombre" required>
@@ -237,12 +237,18 @@
               <option>Comprador</option>
             </select>
           </div>
+          <span>Ubicacion</span>
+          <div class="form-group">
+            <input type="text" name="centro" required>
+          </div>
+          <div class="form-group">
+            <input type="text" name="zoom" required>
+          </div>
           <div class="form-group">
             <label for="password">Contraseña:</label>
             <input type="password" name="contrasena" required>
           </div>
-          <button class="botonR" type="submit">Actualizar</button>
-          
+          <button class="botonR" type="submit">Recuperar</button>
 
         </form>
       </div>
@@ -252,9 +258,10 @@
 <script>
 
   var carrito = JSON.parse(localStorage.getItem("carrito")) || [];
-//id,nombre,correo,telefono,rol,contrasena
-  const rellenar = (id,nombre,correo,telefono,rol,contrasena) => {
-    console.log(id,nombre,correo,telefono,rol,contrasena)
+
+  const rellenar = (objeto) => {
+    console.log(objeto, 'olqeirabhguidbguidwbbjjndfjkkdfffdfj')
+    const userEdit = objeto
   }
 
   function agregarCarrito(id,name,pricePro,image) {

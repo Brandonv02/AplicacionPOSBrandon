@@ -176,19 +176,8 @@
 
 </head>
 <body>
-  <div class="header">
-    <a class="btn btn-primary" role="button" href="/productosvista">Agregar productos</a>
-    <h1>Tienda de ropa</h1> 
-
-    <div>
-      <a class="btn btn-primary" role="button" href="/profile">Perfil</a>
-      <a class="btn btn-primary" role="button" href="/listUser">Usuarios</a>
-      <button class="btn btn-primary" type="button" onclick="mostrarCarrito()" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
-        Carrito<i class="bi bi-cart-plus-fill"></i>
-      </button>
-
-    </div>
-
+  <div>
+    <%- include('../views/header'); %>
   </div>
 
   <div class="container">
@@ -212,8 +201,6 @@
       <% }); %>
 
   </div>
-  <a href="/excel">Descargar</a>
-  <a href="/grafica">grafica</a>
   
   <div class="containerMap">
     <div id="map"></div>
@@ -228,11 +215,14 @@
     <div id="container-carrito">
     </div>
     <div class="offcanvas-footer">
-      <button type="button" class="btn btn-success">Comprar</button>
+      <!-- <button type="button" class="btn btn-success">Comprar</button> -->
+      <a class="btn btn-success" role="button" href="/procesarCompra">Comprar</a>
       <span class="total">Total: 50000</span>
     </div>
   </div>
 </div>
+
+
 
 <script>
 

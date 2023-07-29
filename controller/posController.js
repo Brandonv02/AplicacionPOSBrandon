@@ -11,7 +11,13 @@ exports.iniciarSesion = async (req, res)=>{
         console.log("No existe usuario");
         res.render('index');
     } else if(buscarUser.contrasena === req.body.contrasena){
-        let listaProducto = await producto.find().limit(10);
+        //let log = JSON.parse(localStorage.getItem("log")) || [];
+        // let logUser = {
+        //     "user" : buscarUser.rol
+        // }
+        // log.push(logUser)
+        // localStorage.setItem("log", JSON.stringify(log));
+        let listaProducto = await producto.find().limit(15);
         res.render('landing', {
             "listProd" : listaProducto
         })
@@ -28,42 +34,42 @@ exports.borrarUser = async (req, res)=>{
 
 exports.recPassword = async(req, res) => {
     let recuperar = await clientes.findOne({nombre : req.body.nombre});
+    let pass = recuperar.contrasena
     if(recuperar === null){
         console.log("No existe")
-
         res.end();
     }else{
         correoUsuario = recuperar.correo;
+        let transporter = nodemailer.createTransport({
+            service: 'Gmail',
+            auth:{
+                user: 'bkvides@misena.edu.co',
+                pass: 'suopznpiybmsrnsx'
+            }
+        });
+        let mailOptions = {
+            from : 'Remitente',
+            to : correoUsuario,
+            subject: 'Recuperacion de contraseña',
+            text: 'Su contraseña es: '+pass
+        }
+        
+        transporter.sendMail(mailOptions, function(error){
+            if(error){
+                console.log(error);
+            }
+            else {
+                console.log("Email Sent to: "+correoUsuario);
+            }
+        })
     }  
-    
-    var transporter = nodemailer.createTransport({
-        service: 'Gmail',
-        auth:{
-            user: 'bkvides@misena.edu.co',
-            pass: 'suopznpiybmsrnsx'
-        }
-    });
-    var mailOptions = {
-        from : 'Remitente',
-        to : correoUsuario,
-        subject: 'Recuperacion de contraseña',
-        text: 'Su contraseña es ${recuperar.contrasena}'
-    }
-    
-    transporter.sendMail(mailOptions, function(error, info){
-        if(error){
-            console.log(error);
-            
-        }
-        else {
-            console.log("Email Sent to: "+correoUsuario);
-            res.render('index');
-        }
-    })
+    res.render('../views/index');
+   
 }
 
 // Controlador para registrar un nuevo usuario
 exports.registerUser = async (req, res) => {
+
     const newUser = new clientes({
       nombre : req.body.nombre,
       telefono: req.body.telefono,
@@ -125,6 +131,10 @@ exports.newproduct = async(req, res) => {
     await nuevoproducto.save();
 
     res.redirect('productosvista')
+}
+
+exports.compra = async(req, res) => {
+    console.log('ingreso')
 }
 
 exports.descargarExcel = async(req, res) => {
@@ -198,4 +208,8 @@ exports.descargarExcel = async(req, res) => {
             }); 
         }
     });
+}
+
+exports.actualizarUser = async(req, res) => {
+    console.log('ingreso')
 }

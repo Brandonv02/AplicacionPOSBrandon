@@ -1,0 +1,52 @@
+<style>
+    .header {
+      background-color: #333;
+      padding: 20px;
+      color: #fff;
+      text-align: center;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .menu-cont {
+      display: flex;
+      flex-direction: column;
+      width: 190px;
+    }
+
+    .menu-cont a {
+      margin-bottom: 12px;
+    }
+</style>
+<div class="header">
+    <div>
+        <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#demo">Menu</button>
+    </div>
+    <h1>Tienda de ropa</h1>
+    <div>
+        <button class="btn btn-primary" type="button" onclick="mostrarCarrito()" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+            Carrito<i class="bi bi-cart-plus-fill"></i>
+        </button>
+        <a class="btn btn-primary" role="button" href="/">Cerrar sesion</a>
+    </div>
+
+</div>
+
+ <div class="offcanvas offcanvas-start text-bg-dark" id="demo" style="width: 200px;">
+  <div class="offcanvas-header">
+    <h1 class="offcanvas-title">Menu</h1>
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+  </div>
+  <div class="offcanvas-bodyM">
+    <div class="menu-cont">
+      <a class="btn btn-primary" role="button" href="/home">Inicio</a>
+        <a class="btn btn-primary" role="button" href="/productosvista">Agregar productos</a>
+        <a class="btn btn-primary" role="button" href="/excel">Descargar excel</a>
+        <a class="btn btn-primary" role="button" href="/productos">Productos</a>
+        <a class="btn btn-primary" role="button" href="/profile">Perfil</a>
+        <a class="btn btn-primary" role="button" href="/listUser">Usuarios</a>
+        <a class="btn btn-primary" role="button" href="/grafica">grafica</a>
+        <a class="btn btn-primary" role="button" href="/">Ventas</a>
+    </div>
+  </div>
+</div> 
