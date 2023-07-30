@@ -20,7 +20,9 @@ app.get('/', (req,res)=>{
     res.render('../views/index')
 })
 
+app.get('/cerrarSesion', ruta.cerrrarSesion)
 app.post('/home', ruta.iniciarSesion);
+app.get('/home', ruta.iniciarSesion);
 app.post('/nuevoUsuario', ruta.registerUser);
 app.post('/recuperarUsuario', ruta.recPassword);
 app.get('/registro', (req, res) => {res.render('register')})
@@ -44,6 +46,7 @@ app.get('/listUser',async (req, res) => {
         })
     });
 app.post('/actualizarUser', ruta.actualizarUser)
+app.post('/actualizarProd', ruta.actualizarProd)
 app.get('/borrarUser/:id', ruta.borrarUser);
 
 app.listen(PORT, ()=>{

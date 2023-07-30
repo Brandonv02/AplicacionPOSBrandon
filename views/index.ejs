@@ -42,6 +42,7 @@
 
       input[type="text"],
       input[type="password"] {
+        outline: none;
         width: 100%;
         padding: 10px;
         border: 1px solid #ccc;
@@ -85,13 +86,13 @@
         <form action="home" method="post">
           <div class="form-group">
             <label for="username">Usuario:</label>
-            <input type="text" name="nombre" placeholder="Ingrese su nombre de usuario" required>
+            <input type="text" name="nombre" id="user" placeholder="Ingrese su nombre de usuario" required>
           </div>
           <div class="form-group">
             <label for="password">Contraseña:</label>
             <input type="password" id="password" name="contrasena" placeholder="Ingrese su contraseña" required>
           </div>
-          <button type="submit">Iniciar sesión</button>
+          <button type="submit" onclick="guardarCookie(nombre)">Iniciar sesión</button>
           <a type="button" class="botonR" href="/registro">Registrarse</a>
           <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
             Recuperar Contraseña
@@ -124,8 +125,27 @@
 
     </main>
 
-    <footer>
-    </footer>
-  </body>
+  <script>
 
+  var Usr = JSON.parse(localStorage.getItem("log")) || [];
+  
+  const guardarCookie = () => {
+
+    let campo = document.getElementById('user').value
+
+    let Users = Usr.filter(element => element.id === id)
+    console.log(Users)
+    let usr ={
+      "id":campo,
+    }
+    Usr.push(usr);
+    saveLocal();
+  }
+
+  const saveLocal = () => {
+    localStorage.setItem("log", JSON.stringify(Usr));
+  };
+   </script>
+
+  </body>
 </html>

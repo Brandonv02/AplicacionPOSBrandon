@@ -4,6 +4,7 @@ const producto = require('../models/pruductos');
 const xl = require('excel4node');
 const path = require('path')
 const fs = require('fs');
+const localStorage = require('node-localstorage');
 
 exports.iniciarSesion = async (req, res)=>{
     let buscarUser = await clientes.findOne({nombre : req.body.nombre});
@@ -26,6 +27,10 @@ exports.iniciarSesion = async (req, res)=>{
         res.render('index');
     }
 };
+
+exports.cerrrarSesion = () => {
+    
+}
 
 exports.borrarUser = async (req, res)=>{
     let buscarUser = await clientes.findByIdAndDelete({_id : req.params.id});
@@ -119,6 +124,10 @@ exports.grafica = async (req,res)=>{
 };
 
 exports.newproduct = async(req, res) => {
+
+    let produc = req.body.Referencia
+    let buscarUser = await producto.findOne({Referencia : produc});
+
     const nuevoproducto = new producto({
         nombre : req.body.nombre,
         referencia : req.body.Referencia,
@@ -133,20 +142,16 @@ exports.newproduct = async(req, res) => {
     res.redirect('productosvista')
 }
 
-exports.compra = async(req, res) => {
-    console.log('ingreso')
-}
-
 exports.descargarExcel = async(req, res) => {
     //configuramos el excel4node
-
+    
     //creamos un nuevo documento
     const wb = new xl.Workbook();
     //definimos el nombre con el cual se descargara el archivo 
     const nombreArchivo = 'TablaProductos';
     //se define el nombre 
     var ws = wb.addWorksheet(nombreArchivo);
-
+    
     //definimos estilos
     const columnaEstilo = wb.createStyle({
         font: {
@@ -170,10 +175,10 @@ exports.descargarExcel = async(req, res) => {
     ws.cell(1, 2).string('Nombre').style(columnaEstilo);
     ws.cell(1, 3).string('Descripcion').style(columnaEstilo);
     ws.cell(1, 4).string('Precio').style(columnaEstilo);
-
+    
     //llamamos a la base de datos
     const listaProductos = await producto.find()
-
+    
     // definimos un contador que empiece en 2 
     let fila = 2;
 
@@ -187,7 +192,7 @@ exports.descargarExcel = async(req, res) => {
     
     fila = fila +1;
     });
-
+    
     const rutaExcel = path.join(__dirname,'excel'+ nombreArchivo +'.xlsx');
 
     //escribir y guardar en el documento 
@@ -200,7 +205,7 @@ exports.descargarExcel = async(req, res) => {
             //guardamos el documento en la carpeta para excel para poder descargarla en el pc
             res.download(rutaExcel);
             console.log('documento descargado correctamente');
-
+            
             //Eliminamos el documento de la carpeta excel
             fs.rm(rutaExcel, function(err){
                 if(err)console.log(err);
@@ -211,5 +216,20 @@ exports.descargarExcel = async(req, res) => {
 }
 
 exports.actualizarUser = async(req, res) => {
+    let id_user = req.body.id
+    await clientes.findByIdAndUpdate(id_user, req.body)
+    
+    res.redirect('/listUser')
+}
+
+exports.actualizarProd = async(req, res) => {
+    let id_prod = req.body.id
+    await producto.findByIdAndUpdate(id_prod, req.body)
+    
+    res.redirect('/productos')
+}
+
+
+exports.compra = async(req, res) => {
     console.log('ingreso')
 }
