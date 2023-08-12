@@ -2,12 +2,12 @@ const express = require('express');
 const morgan = require('morgan')
 const app = express();
 const path = require('path');
-const ruta = require('./controller/posController');
-const clientes = require('./models/clientes');
-const producto = require('./models/pruductos');
+const ruta = require('./backend/controller/posController');
+const clientes = require('./backend/models/clientes');
+const producto = require('./backend/models/pruductos');
 
 app.set('view engine', 'ejs')
-app.set('views', path.join(__dirname,'views'));
+app.set('views', path.join(__dirname,'./frontend/views'));
 app.use(morgan("dev"));
 app.use(express.urlencoded({extended:true}));
 app.use(express.static("static"));
