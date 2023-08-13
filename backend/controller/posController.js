@@ -1,23 +1,17 @@
 const clientes = require('../models/clientes');
-const nodemailer = require('nodemailer');
 const producto = require('../models/pruductos');
+const useCase = require('../use-cases/casosDeUso');
+const nodemailer = require('nodemailer');
 const xl = require('excel4node');
 const path = require('path')
 const fs = require('fs');
-const localStorage = require('node-localstorage');
 
 exports.iniciarSesion = async (req, res)=>{
-    let buscarUser = await clientes.findOne({nombre : req.body.nombre});
+    let buscarUser = useCase.consultac(req.body.nombre,res)
     if(buscarUser.length === 0) {   
         console.log("No existe usuario");
         res.render('index');
     } else if(buscarUser.contrasena === req.body.contrasena){
-        //let log = JSON.parse(localStorage.getItem("log")) || [];
-        // let logUser = {
-        //     "user" : buscarUser.rol
-        // }
-        // log.push(logUser)
-        // localStorage.setItem("log", JSON.stringify(log));
         let listaProducto = await producto.find().limit(15);
         res.render('landing', {
             "listProd" : listaProducto
