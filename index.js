@@ -1,11 +1,14 @@
 const express = require('express');
-const morgan = require('morgan')
+const morgan = require('morgan');
+const jwt = require('jsonwebtoken');
 const app = express();
 const path = require('path');
 const ruta = require('./backend/controller/posController');
 const clientes = require('./backend/models/clientes');
 const producto = require('./backend/models/pruductos');
+const verifyToken = require('./backend/middleware/auth');
 
+require('dotenv').config();
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname,'./frontend/views'));
 app.use(morgan("dev"));
@@ -48,6 +51,24 @@ app.get('/listUser',async (req, res) => {
 app.post('/actualizarUser', ruta.actualizarUser)
 app.post('/actualizarProd', ruta.actualizarProd)
 app.get('/borrarUser/:id', ruta.borrarUser);
+
+app.post('/auth' , (req,res) => {
+    const id  = process.env.ID_US;
+    const username = process.env.NAME_US;
+    const password = process.env.PASS_US;
+    jwt.sign(id , 'secret_key' , (err,token) => {
+        if(err){
+          res.status(400).send({msg : 'Error'})
+        }
+        else {
+          res.send({msg:'success' , token: token})
+        }
+    })
+ })
+
+app.post('/login' , verifyToken , (req,res) => {
+    res.send('You are Authorized!')
+})
 
 app.listen(PORT, ()=>{
     console.log('estoy en el puerto: ' + PORT);

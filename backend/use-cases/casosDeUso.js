@@ -1,13 +1,16 @@
-const {consulta} = require('../models/clientes')
+const cliente = require('../models/clientes')
 
-exports.consultac = (req,res,next) => {
-    console.log(typeof consulta)
-    console.log(consulta.length)
-    let consultaCliente = consulta.findOne({"nombre": "admin"});
-    console.log(consultaCliente,"dfhdfgdfgdf");
-    if (consultaCliente) {
-        res.status(200).json({datos: consultaCliente})
-    }else{
-        res.status(400).json({res:"error"})
-    }
+exports.consultac = async (usr,pass) => {
+    let consultaCliente = {}; 
+    consultaCliente = await cliente.findOne( { "nombre" : usr } );
+        if (consultaCliente.nombre === usr) {
+            if (consultaCliente.contrasena === pass){
+                return consultaCliente;
+            }else{
+                return {"msg": "Contraseña incorrecta"};
+            }
+        }else{
+            return {"msg": "No existe el usuario"};
+        }
 }
+

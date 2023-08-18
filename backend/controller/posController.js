@@ -1,25 +1,25 @@
 const clientes = require('../models/clientes');
 const producto = require('../models/pruductos');
-const useCase = require('../use-cases/casosDeUso');
+const {consultac} = require('../use-cases/casosDeUso.js');
 const nodemailer = require('nodemailer');
 const xl = require('excel4node');
 const path = require('path')
 const fs = require('fs');
 
 exports.iniciarSesion = async (req, res)=>{
-    let buscarUser = useCase.consultac(req.body.nombre,res)
-    if(buscarUser.length === 0) {   
-        console.log("No existe usuario");
-        res.render('index');
-    } else if(buscarUser.contrasena === req.body.contrasena){
-        let listaProducto = await producto.find().limit(15);
-        res.render('landing', {
-            "listProd" : listaProducto
-        })
-    } else {
-        console.log('Contraseña incorrecta');
-        res.render('index');
-    }
+    let user = req.body.nombre
+    let pass = req.body.contrasena
+    let buscarUser = consultac(user,pass).then(
+        async (value) => {
+            if(value.contrasena === pass) {   
+                let listaProducto = await producto.find().limit(15);
+                res.render('landing', {
+                    "listProd" : listaProducto
+                })
+            } else {
+                res.json(value.msg);
+            }
+        });
 };
 
 exports.cerrrarSesion = () => {
