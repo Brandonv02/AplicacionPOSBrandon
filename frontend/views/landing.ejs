@@ -217,7 +217,7 @@
     <div class="offcanvas-footer">
       <!-- <button type="button" class="btn btn-success">Comprar</button> -->
       <a class="btn btn-success" role="button" href="/procesarCompra">Comprar</a>
-      <span class="total">Total: 50000</span>
+      <span class="totalPrice"></span>
     </div>
   </div>
 </div>
@@ -322,11 +322,8 @@
 
   const carritoCounter = () => {
     cantidadCarrito.style.display = "block";
-
     const carritoLength = carrito.length;
-
     localStorage.setItem("carritoLength", JSON.stringify(carritoLength));
-
     cantidadCarrito.innerText = JSON.parse(localStorage.getItem("carritoLength"));
   };
 </script>
